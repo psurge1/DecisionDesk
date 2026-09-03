@@ -1,5 +1,6 @@
 import { decisionStore } from "../store/decisionStore";
 import type { DecisionStore } from "../store/decisionStore";
+import { createMutationTools } from "./mutationTools";
 import { createReadTools } from "./readTools";
 import type { WebMcpModelContext, WebMcpTool } from "./types";
 
@@ -13,7 +14,7 @@ export type WebMcpRegistration = {
 export async function registerDecisionDeskWebMcp(
   context: WebMcpModelContext | undefined = document.modelContext,
   store: DecisionStore = decisionStore,
-  tools: WebMcpTool[] = createReadTools(store),
+  tools: WebMcpTool[] = [...createReadTools(store), ...createMutationTools(store)],
 ): Promise<WebMcpRegistration> {
   if (!context) {
     return { supported: false, registeredToolNames: [], dispose: () => undefined };

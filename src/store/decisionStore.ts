@@ -21,6 +21,7 @@ export type CreateDeskInput = {
   title: string;
   initialOptionNames?: string[];
   optionSource?: ContentSource;
+  open?: boolean;
 };
 
 export type AddOptionInput = {
@@ -295,7 +296,7 @@ export function createDecisionStore(initialState: AppState, options: DecisionSto
 
       publish({
         desks: [...state.desks, desk],
-        currentDeskId: desk.id,
+        currentDeskId: input.open === false ? state.currentDeskId : desk.id,
       });
 
       return desk;
