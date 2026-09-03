@@ -1,6 +1,7 @@
 import { FocusEvent, FormEvent, KeyboardEvent, useState } from "react";
 import { decisionStore } from "../store";
 import type { Desk, ThoughtType } from "../types";
+import { ConsiderationTray } from "./ConsiderationTray";
 import { ThoughtCard } from "./ThoughtCard";
 
 type DeskWorkspaceProps = {
@@ -202,21 +203,7 @@ export function DeskWorkspace({ desk }: DeskWorkspaceProps) {
         </div>
       </section>
 
-      {desk.considerations.length ? (
-        <section className="open-questions" aria-label="Open considerations">
-          <h2>Things I’m still thinking about</h2>
-          <div className="consideration-list">
-            {desk.considerations.map((consideration) => (
-              <div className="consideration-item" key={consideration.id}>
-                <span>{consideration.text}</span>
-                {consideration.source === "agent" ? (
-                  <span className="agent-mark">Agent</span>
-                ) : null}
-              </div>
-            ))}
-          </div>
-        </section>
-      ) : null}
+      <ConsiderationTray desk={desk} />
     </section>
   );
 }
