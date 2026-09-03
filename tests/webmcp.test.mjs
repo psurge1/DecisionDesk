@@ -6,6 +6,7 @@ let createDecisionStore;
 let demoAppState;
 let createReadTools;
 let createMutationTools;
+let createDecisionDeskTools;
 let registerDecisionDeskWebMcp;
 
 before(async () => {
@@ -27,6 +28,7 @@ before(async () => {
         export { demoAppState } from "./src/data/demoDesk.ts";
         export { createReadTools } from "./src/webmcp/readTools.ts";
         export { createMutationTools } from "./src/webmcp/mutationTools.ts";
+        export { createDecisionDeskTools } from "./src/webmcp/tools.ts";
         export { registerDecisionDeskWebMcp } from "./src/webmcp/register.ts";
           `;
         },
@@ -40,7 +42,24 @@ before(async () => {
   });
   const source = bundle.output.find((output) => output.type === "chunk").code;
   const modules = await import(`data:text/javascript;base64,${Buffer.from(source).toString("base64")}`);
-  ({ createDecisionStore, demoAppState, createReadTools, createMutationTools, registerDecisionDeskWebMcp } = modules);
+  ({ createDecisionStore, demoAppState, createReadTools, createMutationTools, createDecisionDeskTools, registerDecisionDeskWebMcp } = modules);
+});
+
+test("shared tool catalog contains the definitions used for registration and inspection", async () => {
+  const store = createDecisionStore(demoAppState);
+  const tools = createDecisionDeskTools(store);
+  const registered = [];
+
+  await registerDecisionDeskWebMcp(
+    { registerTool(tool) { registered.push(tool); } },
+    store,
+    tools,
+  );
+
+  assert.equal(tools.length, 21);
+  assert.equal(tools.filter((tool) => tool.annotations?.readOnlyHint).length, 7);
+  assert.equal(tools.filter((tool) => !tool.annotations?.readOnlyHint).length, 14);
+  assert.deepEqual(registered, tools);
 });
 
 test("registers all read and mutation tools with schemas", async () => {
