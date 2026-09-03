@@ -1,5 +1,6 @@
 # DecisionDesk submission kit
 
+
 This file contains the remaining publishing fields and a ready-to-record demo outline. Replace bracketed values only after the corresponding public asset exists.
 
 ## Publication checklist
