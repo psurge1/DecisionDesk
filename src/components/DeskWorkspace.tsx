@@ -2,6 +2,7 @@ import { FocusEvent, FormEvent, KeyboardEvent, useState } from "react";
 import { decisionStore } from "../store";
 import type { Desk, ThoughtType } from "../types";
 import { ConsiderationTray } from "./ConsiderationTray";
+import { DecisionSummary } from "./DecisionSummary";
 import { ThoughtCard } from "./ThoughtCard";
 
 type DeskWorkspaceProps = {
@@ -99,8 +100,10 @@ export function DeskWorkspace({ desk }: DeskWorkspaceProps) {
         <h1>{desk.title}</h1>
       </header>
 
-      <section className="options-area" aria-label="Decision options">
-        <div className="option-grid">
+      <div className="decision-layout">
+        <div className="decision-content">
+          <section className="options-area" aria-label="Decision options">
+            <div className="option-grid">
           {desk.options.map((option, optionIndex) => (
             <article
               className={`option-column option-column--${(optionIndex % 3) + 1}`}
@@ -200,10 +203,13 @@ export function DeskWorkspace({ desk }: DeskWorkspaceProps) {
               <span className="add-option-label">Option</span>
             </button>
           )}
-        </div>
-      </section>
+            </div>
+          </section>
 
-      <ConsiderationTray desk={desk} />
+          <ConsiderationTray desk={desk} />
+        </div>
+        <DecisionSummary desk={desk} />
+      </div>
     </section>
   );
 }
