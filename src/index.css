@@ -587,23 +587,29 @@ h1 {
 }
 
 .option-header {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   min-height: 42px;
   margin-bottom: 8px;
 }
 
 .option-header h2 {
+  min-width: 0;
   margin: 0;
   color: var(--color-ink);
   font-size: 17px;
   font-weight: 600;
   letter-spacing: 0.015em;
   line-height: 1.3;
+  overflow-wrap: anywhere;
 }
 
 .option-heading {
   display: flex;
+  width: 100%;
   align-items: baseline;
+  flex-wrap: wrap;
   gap: 9px;
 }
 
@@ -624,10 +630,10 @@ h1 {
 }
 
 .option-actions {
-  position: absolute;
-  top: 26px;
-  left: 0;
   display: flex;
+  min-height: 16px;
+  margin-top: 4px;
+  flex-wrap: wrap;
   gap: 9px;
   opacity: 0;
   pointer-events: none;
