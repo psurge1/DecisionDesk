@@ -588,8 +588,8 @@ h1 {
 
 .option-header {
   position: relative;
-  min-height: 27px;
-  margin-bottom: 23px;
+  min-height: 42px;
+  margin-bottom: 8px;
 }
 
 .option-header h2 {
@@ -625,12 +625,19 @@ h1 {
 
 .option-actions {
   position: absolute;
-  top: 1px;
-  right: 0;
+  top: 26px;
+  left: 0;
   display: flex;
   gap: 9px;
   opacity: 0;
   pointer-events: none;
+}
+
+.option-actions > span {
+  color: var(--ink-quiet);
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .option-column:hover .option-actions,
@@ -646,6 +653,29 @@ h1 {
   font-size: 9px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+
+.option-header--editing {
+  min-height: 51px;
+  margin-bottom: -1px;
+}
+
+.option-name-editor input {
+  width: 100%;
+  padding: 1px 0 5px;
+  border: 0;
+  border-bottom: 1px solid var(--color-secondary);
+  border-radius: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.option-name-editor .inline-actions {
+  margin-top: 7px;
 }
 
 .option-actions button:not(:disabled):hover,

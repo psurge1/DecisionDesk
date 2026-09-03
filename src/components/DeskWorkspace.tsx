@@ -3,6 +3,7 @@ import { decisionStore } from "../store";
 import type { Desk, ThoughtType } from "../types";
 import { ConsiderationTray } from "./ConsiderationTray";
 import { DecisionSummary } from "./DecisionSummary";
+import { OptionHeader } from "./OptionHeader";
 import { ThoughtCard } from "./ThoughtCard";
 
 type DeskWorkspaceProps = {
@@ -109,22 +110,11 @@ export function DeskWorkspace({ desk }: DeskWorkspaceProps) {
               className={`option-column option-column--${(optionIndex % 3) + 1}`}
               key={option.id}
             >
-              <header className="option-header">
-                <div className="option-heading">
-                  <h2>{option.name}</h2>
-                  {option.source === "agent" ? (
-                    <span className="agent-mark">Agent suggested</span>
-                  ) : null}
-                </div>
-                <div className="option-actions">
-                  <button type="button" onClick={() => startThoughtDraft(option.id, "pro")}>
-                    + Pro
-                  </button>
-                  <button type="button" onClick={() => startThoughtDraft(option.id, "con")}>
-                    − Con
-                  </button>
-                </div>
-              </header>
+              <OptionHeader
+                deskId={desk.id}
+                option={option}
+                onAddThought={(type) => startThoughtDraft(option.id, type)}
+              />
               <div className="thought-stack">
                 {option.thoughts.map((thought) => (
                   <ThoughtCard
