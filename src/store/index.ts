@@ -9,6 +9,7 @@ export type {
   AddThoughtInput,
   CreateDeskInput,
   DecisionStore,
+  DecisionStoreOptions,
   ResolveConsiderationInput,
 } from "./decisionStore";
 export {
@@ -20,4 +21,11 @@ export {
   getTradeoffSummary,
 } from "./analysis";
 export type { DeskLean, OptionTradeoff, TradeoffSummary } from "./analysis";
+export {
+  APP_STATE_STORAGE_KEY,
+  loadAppState,
+  parseAppState,
+  saveAppState,
+} from "./persistence";
+export type { StorageLike } from "./persistence";
 export { useCurrentDesk, useDecisionState } from "./useDecisionState";

@@ -8,8 +8,14 @@ import {
   getStrongestPros as deriveStrongestPros,
   getTradeoffSummary as deriveTradeoffSummary,
 } from "./analysis";
+import { loadAppState, saveAppState } from "./persistence";
 
 type Listener = () => void;
+
+export type DecisionStoreOptions = {
+  onStateChange?: (state: AppState) => void;
+  resetState?: AppState;
+};
 
 export type CreateDeskInput = {
   title: string;
@@ -81,7 +87,7 @@ function requireWeight(value: number): ThoughtWeight {
   return value as ThoughtWeight;
 }
 
-export function createDecisionStore(initialState: AppState) {
+export function createDecisionStore(initialState: AppState, options: DecisionStoreOptions = {}) {
   let state = structuredClone(initialState);
   const listeners = new Set<Listener>();
 
@@ -94,6 +100,7 @@ export function createDecisionStore(initialState: AppState) {
 
   const publish = (nextState: AppState): void => {
     state = nextState;
+    options.onStateChange?.(state);
     listeners.forEach((listener) => listener());
   };
 
@@ -264,6 +271,12 @@ export function createDecisionStore(initialState: AppState) {
 
     getCurrentDesk: (): Desk | null =>
       state.desks.find((desk) => desk.id === state.currentDeskId) ?? null,
+
+    resetDemo: (): AppState => {
+      const resetState = structuredClone(options.resetState ?? demoAppState);
+      publish(resetState);
+      return resetState;
+    },
 
     createDesk: (input: CreateDeskInput): Desk => {
       const optionSource = input.optionSource ?? "human";
@@ -498,6 +511,11 @@ export function createDecisionStore(initialState: AppState) {
   };
 }
 
-export const decisionStore = createDecisionStore(demoAppState);
+export const decisionStore = createDecisionStore(loadAppState() ?? demoAppState, {
+  onStateChange: (state) => {
+    saveAppState(state);
+  },
+  resetState: demoAppState,
+});
 
 export type DecisionStore = ReturnType<typeof createDecisionStore>;
