@@ -152,6 +152,25 @@ test("mutation handlers reuse the store and preserve agent provenance", async ()
   assert.equal(desk.considerations.length, 0);
 });
 
+test("mutation descriptions encode the collaboration trust rules", () => {
+  const tools = new Map(createMutationTools(createDecisionStore(demoAppState)).map((tool) => [tool.name, tool]));
+
+  for (const name of ["add_pro", "add_con"]) {
+    assert.match(tools.get(name).description, /actually known/i);
+    assert.match(tools.get(name).description, /do not invent/i);
+    assert.match(tools.get(name).description, /add_consideration/i);
+  }
+
+  assert.match(tools.get("add_consideration").description, /unknown/i);
+  assert.match(tools.get("add_consideration").description, /must remain a consideration/i);
+  assert.match(tools.get("add_option").description, /suggestions/i);
+
+  for (const name of ["remove_option", "edit_thought", "remove_thought", "set_thought_weight", "unpin_thought"]) {
+    assert.match(tools.get(name).description, /human-protected judgment/i);
+    assert.match(tools.get(name).description, /explicitly requests/i);
+  }
+});
+
 test("read handlers always observe the current shared store state", async () => {
   const store = createDecisionStore(demoAppState);
   const tools = new Map(createReadTools(store).map((tool) => [tool.name, tool]));

@@ -2,6 +2,11 @@ import { decisionStore } from "../store/decisionStore";
 import type { DecisionStore } from "../store/decisionStore";
 import type { ThoughtWeight } from "../types";
 import type { JsonSchema, WebMcpTool } from "./types";
+import {
+  KNOWN_INFORMATION_GUIDANCE,
+  PINNED_JUDGMENT_GUIDANCE,
+  SUGGESTED_OPTION_GUIDANCE,
+} from "./trust";
 
 type Input = Record<string, unknown>;
 
@@ -73,7 +78,7 @@ export function createMutationTools(store: DecisionStore = decisionStore): WebMc
       name: "create_desk",
       title: "Create Decision Desk",
       description:
-        "Create a new decision desk without changing the desk currently open by the human. Initial options are marked as agent suggestions.",
+        `Create a new decision desk without changing the desk currently open by the human. ${SUGGESTED_OPTION_GUIDANCE}`,
       inputSchema: schema(
         {
           title: { type: "string", description: "The decision question or title." },
@@ -115,7 +120,7 @@ export function createMutationTools(store: DecisionStore = decisionStore): WebMc
       name: "add_option",
       title: "Suggest Decision Option",
       description:
-        "Add an alternative as an agent suggestion. Add only a plausible option; do not imply the human selected it.",
+        `Add a plausible alternative for consideration. ${SUGGESTED_OPTION_GUIDANCE}`,
       inputSchema: schema(
         { ...deskIdProperty, name: { type: "string", description: "Suggested option name." } },
         ["name"],
@@ -148,7 +153,7 @@ export function createMutationTools(store: DecisionStore = decisionStore): WebMc
       name: "remove_option",
       title: "Remove Decision Option",
       description:
-        "Remove an option. Avoid removing human-created options or any option containing pinned judgment unless the human explicitly asks.",
+        `Remove an option only when explicitly requested. ${PINNED_JUDGMENT_GUIDANCE}`,
       inputSchema: schema(optionIdentity, ["option_id"]),
       execute: (input: Input) => ({
         removed_option: store.removeOption(
@@ -162,8 +167,7 @@ export function createMutationTools(store: DecisionStore = decisionStore): WebMc
         name: type === "pro" ? "add_pro" : "add_con",
         title: type === "pro" ? "Add Known Pro" : "Add Known Con",
         description:
-          `Add an agent-created ${type} only when it is supported by known conversation context. ` +
-          "If the information is unknown or merely worth checking, use add_consideration instead.",
+          `Add an agent-created ${type}. ${KNOWN_INFORMATION_GUIDANCE}`,
         inputSchema: schema(
           {
             ...optionIdentity,
@@ -188,7 +192,7 @@ export function createMutationTools(store: DecisionStore = decisionStore): WebMc
       name: "edit_thought",
       title: "Edit Existing Thought",
       description:
-        "Edit a thought's wording while preserving provenance. Do not alter pinned human judgment unless explicitly requested.",
+        `Edit a thought's wording while preserving provenance. ${PINNED_JUDGMENT_GUIDANCE}`,
       inputSchema: schema(
         { ...thoughtIdentity, text: { type: "string", description: "Replacement thought text." } },
         ["option_id", "thought_id", "text"],
@@ -209,7 +213,7 @@ export function createMutationTools(store: DecisionStore = decisionStore): WebMc
       name: "remove_thought",
       title: "Remove Existing Thought",
       description:
-        "Remove a thought. Never remove pinned human judgment unless the human explicitly requests it.",
+        `Remove a thought only when explicitly requested. ${PINNED_JUDGMENT_GUIDANCE}`,
       inputSchema: schema(thoughtIdentity, ["option_id", "thought_id"]),
       execute: (input: Input) => {
         const location = thoughtLocation(input, store);
@@ -220,7 +224,7 @@ export function createMutationTools(store: DecisionStore = decisionStore): WebMc
       name: "set_thought_weight",
       title: "Set Thought Importance",
       description:
-        "Set a thought's 1–5 importance. Respect human-set and pinned priorities unless a change is explicitly requested.",
+        `Set a thought's 1–5 importance only when requested. ${PINNED_JUDGMENT_GUIDANCE}`,
       inputSchema: schema(
         { ...thoughtIdentity, weight: weightProperty },
         ["option_id", "thought_id", "weight"],
@@ -244,7 +248,7 @@ export function createMutationTools(store: DecisionStore = decisionStore): WebMc
         description:
           action === "pin"
             ? "Pin a thought only when the human explicitly identifies it as personally important or protected."
-            : "Unpin a thought only at the human's explicit request.",
+            : `Unpin a thought only at the human's explicit request. ${PINNED_JUDGMENT_GUIDANCE}`,
         inputSchema: schema(thoughtIdentity, ["option_id", "thought_id"]),
         execute: (input: Input) => {
           const location = thoughtLocation(input, store);
@@ -261,7 +265,7 @@ export function createMutationTools(store: DecisionStore = decisionStore): WebMc
       name: "add_consideration",
       title: "Add Unresolved Consideration",
       description:
-        "Add an agent-created inbox question for missing, unknown, or unresolved information. This is the correct tool when a possible pro or con is not yet known to be true.",
+        "Add an agent-created inbox question for missing, unknown, suspected, or unresolved information. Known information may become a pro or con; anything not known to be true must remain a consideration.",
       inputSchema: schema(
         {
           ...deskIdProperty,
