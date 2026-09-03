@@ -73,7 +73,7 @@ export function ThoughtCard({ deskId, optionId, thought }: ThoughtCardProps) {
           {thought.type === "pro" ? "+" : "−"}
         </span>
         <div className="thought-origin">
-          {thought.source === "agent" ? <span className="thought-source">Agent</span> : null}
+          {thought.source === "agent" ? <span className="agent-mark thought-source">Agent</span> : null}
           <button
             className={`pin-button${thought.pinned ? " pin-button--active" : ""}`}
             type="button"

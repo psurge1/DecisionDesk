@@ -106,7 +106,12 @@ export function DeskWorkspace({ desk }: DeskWorkspaceProps) {
               key={option.id}
             >
               <header className="option-header">
-                <h2>{option.name}</h2>
+                <div className="option-heading">
+                  <h2>{option.name}</h2>
+                  {option.source === "agent" ? (
+                    <span className="agent-mark">Agent suggested</span>
+                  ) : null}
+                </div>
                 <div className="option-actions">
                   <button type="button" onClick={() => startThoughtDraft(option.id, "pro")}>
                     + Pro
@@ -204,6 +209,9 @@ export function DeskWorkspace({ desk }: DeskWorkspaceProps) {
             {desk.considerations.map((consideration) => (
               <div className="consideration-item" key={consideration.id}>
                 <span>{consideration.text}</span>
+                {consideration.source === "agent" ? (
+                  <span className="agent-mark">Agent</span>
+                ) : null}
               </div>
             ))}
           </div>
