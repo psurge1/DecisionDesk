@@ -631,6 +631,7 @@ h1 {
   gap: 9px;
   opacity: 0;
   pointer-events: none;
+  transition: opacity 120ms ease;
 }
 
 .option-actions > span {
@@ -771,6 +772,7 @@ h1 {
   height: 15px;
   padding: 0 2px;
   opacity: 0;
+  transition: opacity 120ms ease;
 }
 
 .thought-card:hover .pin-button,
@@ -908,6 +910,7 @@ h1 {
   gap: 10px;
   opacity: 0;
   pointer-events: none;
+  transition: opacity 120ms ease;
 }
 
 .thought-card:hover .thought-actions,
@@ -1049,6 +1052,7 @@ h1 {
   margin-top: 11px;
   opacity: 0;
   pointer-events: none;
+  transition: opacity 120ms ease;
 }
 
 .consideration-item:hover .consideration-actions,
@@ -1243,12 +1247,28 @@ h1 {
     pointer-events: auto;
   }
 
+  .option-actions button,
+  .thought-actions button,
+  .consideration-actions button {
+    color: var(--ink-muted);
+  }
+
   .option-grid {
     gap: 20px;
   }
 
   .open-questions {
     margin-top: 52px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desk-card-actions,
+  .option-actions,
+  .pin-button,
+  .thought-actions,
+  .consideration-actions {
+    transition: none;
   }
 }
 
