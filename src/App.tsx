@@ -24,7 +24,7 @@ function App() {
         <section className="options-area" aria-label="Decision options">
           <div className="option-grid">
             {demoDesk.options.map((option, optionIndex) => (
-              <article className={`option-column option-column--${optionIndex + 1}`} key={option.name}>
+              <article className={`option-column option-column--${optionIndex + 1}`} key={option.id}>
                 <header className="option-header">
                   <h2>{option.name}</h2>
                   <div className="option-actions">
@@ -40,7 +40,7 @@ function App() {
                   {option.thoughts.map((thought) => (
                     <div
                       className={`thought-card thought-card--${thought.type}${thought.pinned ? " thought-card--pinned" : ""}`}
-                      key={`${option.name}-${thought.text}`}
+                      key={thought.id}
                     >
                       <div className="thought-meta">
                         <span className="thought-type" aria-label={thought.type === "pro" ? "Pro" : "Con"}>
@@ -74,8 +74,8 @@ function App() {
           <h2>Things I’m still thinking about</h2>
           <div className="consideration-list">
             {demoDesk.considerations.map((consideration) => (
-              <div className="consideration-item" key={consideration}>
-                <span>{consideration}</span>
+              <div className="consideration-item" key={consideration.id}>
+                <span>{consideration.text}</span>
               </div>
             ))}
           </div>
