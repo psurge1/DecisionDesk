@@ -45,7 +45,7 @@ function App() {
             Desks
           </button>
           <button className="new-desk-button" type="button" onClick={startNewDesk}>
-            <span aria-hidden="true">+</span> New desk
+            New desk
           </button>
           <button
             className="site-tools-button"

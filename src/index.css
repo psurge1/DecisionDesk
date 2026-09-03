@@ -394,12 +394,6 @@ button:disabled {
   line-height: 1.2;
 }
 
-.desk-switcher::after {
-  margin-left: 7px;
-  color: var(--color-secondary);
-  content: "⌄";
-}
-
 .desk-switcher:hover,
 .desk-switcher:focus-visible,
 .new-desk-button:not(:disabled):hover,
@@ -408,17 +402,6 @@ button:disabled {
 .site-tools-button:focus-visible {
   border-bottom-color: var(--color-secondary);
   color: var(--color-ink);
-}
-
-.site-tools-button {
-  color: var(--ink-quiet);
-  font-size: 12px;
-}
-
-.new-desk-button span {
-  margin-right: 4px;
-  color: var(--color-primary);
-  font-size: 16px;
 }
 
 .new-desk-button:disabled {
