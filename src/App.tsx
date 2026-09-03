@@ -1,39 +1,55 @@
-import { useCurrentDesk } from "./store";
+import { useState } from "react";
+import { DeskLibrary } from "./components/DeskLibrary";
+import { decisionStore, useDecisionState } from "./store";
 import "./index.css";
 
 function App() {
-  const currentDesk = useCurrentDesk();
+  const state = useDecisionState();
+  const [screen, setScreen] = useState<"library" | "desk">("library");
+  const [isCreatingDesk, setIsCreatingDesk] = useState(false);
+  const currentDesk = state.desks.find((desk) => desk.id === state.currentDeskId) ?? null;
 
-  if (!currentDesk) {
-    return (
-      <main className="app-shell">
-        <header className="app-header">
-          <div className="brand-lockup">DecisionDesk</div>
-        </header>
-        <section className="desk-workspace">
-          <header className="workspace-header">
-            <h1>No desk selected</h1>
-          </header>
-        </section>
-      </main>
-    );
-  }
+  const showLibrary = () => {
+    setScreen("library");
+    setIsCreatingDesk(false);
+  };
+
+  const startNewDesk = () => {
+    setScreen("library");
+    setIsCreatingDesk(true);
+  };
+
+  const openDesk = (deskId: string) => {
+    decisionStore.openDesk(deskId);
+    setIsCreatingDesk(false);
+    setScreen("desk");
+  };
 
   return (
     <main className="app-shell">
       <header className="app-header">
-        <div className="brand-lockup">DecisionDesk</div>
+        <button className="brand-lockup" type="button" onClick={showLibrary}>
+          DecisionDesk
+        </button>
         <nav className="desk-navigation" aria-label="DecisionDesk navigation">
-          <button className="desk-switcher" type="button" aria-label={`Switch desk. Current desk: ${currentDesk.title}`}>
+          <button className="desk-switcher" type="button" onClick={showLibrary}>
             Desks
           </button>
-          <button className="new-desk-button" type="button" disabled>
+          <button className="new-desk-button" type="button" onClick={startNewDesk}>
             <span aria-hidden="true">+</span> New desk
           </button>
         </nav>
       </header>
 
-      <section className="desk-workspace">
+      {screen === "library" || !currentDesk ? (
+        <DeskLibrary
+          desks={state.desks}
+          isCreating={isCreatingDesk}
+          onCreatingChange={setIsCreatingDesk}
+          onOpenDesk={openDesk}
+        />
+      ) : (
+        <section className="desk-workspace">
         <header className="workspace-header">
           <h1>{currentDesk.title}</h1>
         </header>
@@ -97,7 +113,8 @@ function App() {
             ))}
           </div>
         </section>
-      </section>
+        </section>
+      )}
     </main>
   );
 }

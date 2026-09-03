@@ -37,7 +37,9 @@ body {
 
 button {
   border: 0;
+  background: transparent;
   color: inherit;
+  cursor: pointer;
   font: inherit;
 }
 
@@ -67,11 +69,311 @@ button:disabled {
 }
 
 .brand-lockup {
+  padding: 6px 0;
+  background: transparent;
   color: var(--color-ink);
   font-family: var(--font-display);
   font-size: 17px;
   font-weight: 600;
   letter-spacing: -0.01em;
+}
+
+.desk-library {
+  width: min(100%, 1180px);
+  margin: 0 auto;
+  padding: 70px clamp(34px, 5vw, 72px) 96px;
+}
+
+.library-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 52px;
+}
+
+.library-kicker {
+  margin-bottom: 12px;
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.library-header h1 {
+  font-size: clamp(40px, 5vw, 58px);
+}
+
+.reset-demo-button,
+.quiet-action,
+.inline-actions button,
+.desk-card-actions button,
+.create-desk-heading button {
+  padding: 5px 0;
+  border-bottom: 1px solid transparent;
+  color: var(--ink-muted);
+  font-size: 12px;
+}
+
+.reset-demo-button:hover,
+.quiet-action:hover,
+.inline-actions button:hover,
+.desk-card-actions button:hover,
+.create-desk-heading button:hover {
+  border-bottom-color: var(--color-secondary);
+  color: var(--color-ink);
+}
+
+.desk-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 30px 26px;
+  align-items: stretch;
+}
+
+.desk-card {
+  position: relative;
+  min-height: 225px;
+  padding: 29px 27px 21px;
+  background: var(--surface-paper-muted);
+  box-shadow: 1px 1px 0 var(--paper-edge), 3px 7px 15px var(--paper-shadow);
+}
+
+.desk-card::before {
+  position: absolute;
+  top: -9px;
+  left: 0;
+  width: 42%;
+  height: 10px;
+  background: var(--surface-paper-muted);
+  content: "";
+}
+
+.desk-card:nth-child(3n + 2) {
+  background: var(--surface-paper);
+  transform: translateY(5px);
+}
+
+.desk-card:nth-child(3n + 2)::before {
+  left: 16%;
+  background: var(--surface-paper);
+}
+
+.desk-card:nth-child(3n + 3)::before {
+  left: 34%;
+  width: 35%;
+}
+
+.desk-card-open {
+  display: flex;
+  width: 100%;
+  min-height: 154px;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  text-align: left;
+}
+
+.desk-card-open h2 {
+  max-width: 14ch;
+  margin: 0 0 31px;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 25px;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+}
+
+.desk-card-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 15px;
+  margin-top: auto;
+  color: var(--ink-muted);
+  font-size: 11px;
+}
+
+.desk-card-lean {
+  margin: 9px 0 0;
+  color: var(--color-primary);
+  font-size: 12px;
+}
+
+.desk-card-actions {
+  display: flex;
+  min-height: 25px;
+  align-items: end;
+  gap: 12px;
+  margin-top: 9px;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.desk-card:hover .desk-card-actions,
+.desk-card:focus-within .desk-card-actions {
+  opacity: 1;
+}
+
+.desk-card-actions span {
+  color: var(--ink-muted);
+  font-size: 12px;
+}
+
+.new-desk-sheet {
+  min-height: 225px;
+  border: 1px dashed var(--line-soft);
+  color: var(--ink-muted);
+  font-family: var(--font-display);
+  font-size: 18px;
+}
+
+.new-desk-sheet span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--color-primary);
+  font-family: var(--font-body);
+  font-size: 22px;
+}
+
+.new-desk-sheet:hover {
+  border-color: var(--color-secondary);
+  color: var(--color-ink);
+}
+
+.create-desk-sheet {
+  width: min(100%, 690px);
+  margin: -10px 0 56px;
+  padding: 34px 38px 36px;
+  background: var(--surface-paper);
+  box-shadow: 1px 1px 0 var(--paper-edge), 3px 8px 18px var(--paper-shadow);
+}
+
+.create-desk-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.create-desk-heading label {
+  font-family: var(--font-display);
+  font-size: 25px;
+}
+
+.create-desk-sheet input {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--line-soft);
+  border-radius: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+}
+
+.create-desk-sheet input:focus {
+  border-bottom-color: var(--color-primary);
+}
+
+.decision-title-input {
+  padding: 8px 0 12px;
+  font-family: var(--font-display) !important;
+  font-size: 31px !important;
+  letter-spacing: -0.025em;
+}
+
+.create-desk-sheet fieldset {
+  display: grid;
+  gap: 12px;
+  margin: 31px 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.form-error {
+  margin: 8px 0 0;
+  color: var(--color-primary);
+  font-size: 12px;
+}
+
+.create-desk-sheet legend {
+  margin-bottom: 8px;
+  color: var(--ink-muted);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.create-desk-sheet fieldset input {
+  padding: 7px 0 9px;
+  font-size: 15px;
+}
+
+.create-desk-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 31px;
+}
+
+.primary-action {
+  padding: 9px 15px;
+  border: 1px solid var(--color-ink);
+  background: var(--color-ink);
+  color: var(--surface-paper);
+  font-size: 12px;
+}
+
+.primary-action:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.desk-card-rename {
+  display: flex;
+  min-height: 169px;
+  flex-direction: column;
+}
+
+.desk-card-rename label {
+  margin-bottom: 16px;
+  color: var(--ink-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.desk-card-rename input {
+  width: 100%;
+  padding: 7px 0 10px;
+  border: 0;
+  border-bottom: 1px solid var(--color-secondary);
+  border-radius: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 22px;
+}
+
+.inline-actions {
+  display: flex;
+  gap: 14px;
+  margin-top: auto;
+}
+
+.empty-library {
+  padding: 48px 0;
+  color: var(--ink-muted);
+}
+
+.empty-library button {
+  padding: 7px 0;
+  border-bottom: 1px solid var(--color-secondary);
+  color: var(--color-primary);
 }
 
 .desk-navigation {
@@ -459,6 +761,24 @@ h1 {
 
   .desk-workspace {
     padding: 52px 22px 64px;
+  }
+
+  .desk-library {
+    padding: 52px 22px 64px;
+  }
+
+  .library-header {
+    align-items: flex-start;
+    margin-bottom: 42px;
+  }
+
+  .create-desk-sheet {
+    margin-top: 0;
+    padding: 27px 24px 30px;
+  }
+
+  .desk-card-actions {
+    opacity: 1;
   }
 
   .workspace-header {
