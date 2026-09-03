@@ -9,6 +9,7 @@
   --surface-canvas: #f4efe5;
   --surface-paper: #fff4dc;
   --surface-paper-muted: #f7ead0;
+  --surface-con: #f2dfcf;
   --ink-muted: rgb(var(--ink-rgb) / 68%);
   --ink-quiet: rgb(var(--ink-rgb) / 48%);
   --line-soft: rgb(var(--ink-rgb) / 16%);
@@ -543,7 +544,7 @@ h1 {
 }
 
 .thought-card--con {
-  background: var(--surface-paper-muted);
+  background: var(--surface-con);
 }
 
 .thought-card--pinned {
@@ -582,6 +583,20 @@ h1 {
   margin-bottom: 14px;
 }
 
+.thought-origin {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+}
+
+.thought-source {
+  color: var(--ink-quiet);
+  font-size: 9px;
+  letter-spacing: 0.07em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
 .thought-type {
   color: var(--ink-quiet);
   font-size: 15px;
@@ -598,6 +613,19 @@ h1 {
   display: inline-block;
   width: 10px;
   height: 13px;
+}
+
+.pin-button {
+  width: 14px;
+  height: 15px;
+  padding: 0 2px;
+  opacity: 0;
+}
+
+.thought-card:hover .pin-button,
+.thought-card:focus-within .pin-button,
+.pin-button--active {
+  opacity: 1;
 }
 
 .thought-pin::before {
@@ -623,30 +651,127 @@ h1 {
   transform-origin: top;
 }
 
-.thought-card p {
+.thought-text-button {
+  display: block;
+  width: 100%;
+  min-height: 46px;
   margin-bottom: 20px;
+  padding: 0;
   color: var(--color-ink);
   font-size: 16px;
   font-weight: 400;
   letter-spacing: 0;
   line-height: 1.45;
+  text-align: left;
+}
+
+.thought-editor textarea,
+.thought-draft textarea {
+  display: block;
+  width: 100%;
+  min-height: 70px;
+  padding: 0;
+  resize: vertical;
+  border: 0;
+  border-bottom: 1px solid var(--line-soft);
+  border-radius: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.thought-editor textarea:focus,
+.thought-draft textarea:focus {
+  border-bottom-color: var(--color-secondary);
+}
+
+.thought-editor-actions {
+  display: flex;
+  gap: 13px;
+  margin-top: 12px;
+}
+
+.thought-editor-actions button,
+.thought-actions button {
+  padding: 2px 0;
+  color: var(--ink-quiet);
+  font-size: 9px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.thought-editor-actions button:hover,
+.thought-actions button:hover {
+  color: var(--color-primary);
+}
+
+.thought-footer {
+  display: flex;
+  min-height: 14px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .weight-dots {
   display: flex;
-  gap: 5px;
+  gap: 0;
 }
 
 .weight-dot {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.weight-dot::before {
+  position: absolute;
+  top: 4px;
+  left: 4px;
   width: 5px;
   height: 5px;
   border: 1px solid var(--ink-quiet);
   border-radius: 50%;
+  content: "";
 }
 
-.weight-dot--filled {
+.weight-dot--filled::before {
   border-color: var(--color-ink);
   background: var(--color-ink);
+}
+
+.weight-dot:hover::before,
+.weight-dot:focus-visible::before {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+}
+
+.thought-actions {
+  display: flex;
+  gap: 10px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.thought-card:hover .thought-actions,
+.thought-card:focus-within .thought-actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.thought-draft {
+  padding-top: 19px;
+}
+
+.thought-draft > .thought-type {
+  display: block;
+  margin-bottom: 13px;
 }
 
 .add-option-button {
@@ -826,6 +951,12 @@ h1 {
   }
 
   .option-actions {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .pin-button,
+  .thought-actions {
     opacity: 1;
     pointer-events: auto;
   }

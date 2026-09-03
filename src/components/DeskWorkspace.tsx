@@ -1,6 +1,7 @@
-import { FormEvent, KeyboardEvent, useState } from "react";
+import { FocusEvent, FormEvent, KeyboardEvent, useState } from "react";
 import { decisionStore } from "../store";
-import type { Desk } from "../types";
+import type { Desk, ThoughtType } from "../types";
+import { ThoughtCard } from "./ThoughtCard";
 
 type DeskWorkspaceProps = {
   desk: Desk;
@@ -10,6 +11,11 @@ export function DeskWorkspace({ desk }: DeskWorkspaceProps) {
   const [isAddingOption, setIsAddingOption] = useState(false);
   const [optionName, setOptionName] = useState("");
   const [optionError, setOptionError] = useState("");
+  const [thoughtDraft, setThoughtDraft] = useState<{
+    optionId: string;
+    type: ThoughtType;
+    text: string;
+  } | null>(null);
 
   const closeOptionForm = () => {
     setIsAddingOption(false);
@@ -35,6 +41,57 @@ export function DeskWorkspace({ desk }: DeskWorkspaceProps) {
     }
   };
 
+  const saveThoughtDraft = () => {
+    if (!thoughtDraft) {
+      return;
+    }
+
+    if (thoughtDraft.text.trim()) {
+      const input = {
+        deskId: desk.id,
+        optionId: thoughtDraft.optionId,
+        text: thoughtDraft.text,
+      };
+
+      if (thoughtDraft.type === "pro") {
+        decisionStore.addPro(input);
+      } else {
+        decisionStore.addCon(input);
+      }
+    }
+
+    setThoughtDraft(null);
+  };
+
+  const startThoughtDraft = (optionId: string, type: ThoughtType) => {
+    if (thoughtDraft?.text.trim()) {
+      saveThoughtDraft();
+    }
+
+    setThoughtDraft({ optionId, type, text: "" });
+  };
+
+  const submitThoughtDraft = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    saveThoughtDraft();
+  };
+
+  const handleThoughtDraftBlur = (event: FocusEvent<HTMLFormElement>) => {
+    if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+      saveThoughtDraft();
+    }
+  };
+
+  const handleThoughtDraftKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      setThoughtDraft(null);
+    } else if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      saveThoughtDraft();
+    }
+  };
+
   return (
     <section className="desk-workspace">
       <header className="workspace-header">
@@ -51,46 +108,53 @@ export function DeskWorkspace({ desk }: DeskWorkspaceProps) {
               <header className="option-header">
                 <h2>{option.name}</h2>
                 <div className="option-actions">
-                  <button type="button" disabled>
+                  <button type="button" onClick={() => startThoughtDraft(option.id, "pro")}>
                     + Pro
                   </button>
-                  <button type="button" disabled>
+                  <button type="button" onClick={() => startThoughtDraft(option.id, "con")}>
                     − Con
                   </button>
                 </div>
               </header>
               <div className="thought-stack">
                 {option.thoughts.map((thought) => (
-                  <div
-                    className={`thought-card thought-card--${thought.type}${thought.pinned ? " thought-card--pinned" : ""}`}
+                  <ThoughtCard
+                    deskId={desk.id}
+                    optionId={option.id}
+                    thought={thought}
                     key={thought.id}
-                  >
-                    <div className="thought-meta">
-                      <span
-                        className="thought-type"
-                        aria-label={thought.type === "pro" ? "Pro" : "Con"}
-                      >
-                        {thought.type === "pro" ? "+" : "−"}
-                      </span>
-                      {thought.pinned ? (
-                        <span
-                          className="thought-pin"
-                          role="img"
-                          aria-label="Pinned human judgment"
-                        />
-                      ) : null}
-                    </div>
-                    <p>{thought.text}</p>
-                    <div className="weight-dots" aria-label={`Weight ${thought.weight} out of 5`}>
-                      {[1, 2, 3, 4, 5].map((dot) => (
-                        <span
-                          className={dot <= thought.weight ? "weight-dot weight-dot--filled" : "weight-dot"}
-                          key={dot}
-                        />
-                      ))}
-                    </div>
-                  </div>
+                  />
                 ))}
+                {thoughtDraft?.optionId === option.id ? (
+                  <form
+                    className={`thought-card thought-card--${thoughtDraft.type} thought-draft`}
+                    onSubmit={submitThoughtDraft}
+                    onBlur={handleThoughtDraftBlur}
+                  >
+                    <span className="thought-type" aria-hidden="true">
+                      {thoughtDraft.type === "pro" ? "+" : "−"}
+                    </span>
+                    <textarea
+                      value={thoughtDraft.text}
+                      onChange={(event) =>
+                        setThoughtDraft((current) =>
+                          current ? { ...current, text: event.target.value } : current,
+                        )
+                      }
+                      onKeyDown={handleThoughtDraftKeyDown}
+                      placeholder={thoughtDraft.type === "pro" ? "Add a pro…" : "Add a con…"}
+                      aria-label={thoughtDraft.type === "pro" ? "New pro" : "New con"}
+                      rows={3}
+                      autoFocus
+                    />
+                    <div className="thought-editor-actions">
+                      <button type="submit">Add</button>
+                      <button type="button" onClick={() => setThoughtDraft(null)}>
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                ) : null}
               </div>
             </article>
           ))}
