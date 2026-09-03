@@ -672,6 +672,38 @@ h1 {
   color: var(--color-primary);
 }
 
+.add-option-form {
+  width: clamp(252px, 22vw, 270px);
+  min-width: clamp(252px, 22vw, 270px);
+  padding-top: 1px;
+}
+
+.add-option-form label {
+  display: block;
+  margin-bottom: 18px;
+  color: var(--ink-muted);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.add-option-form input {
+  width: 100%;
+  padding: 8px 0 10px;
+  border: 0;
+  border-bottom: 1px solid var(--color-secondary);
+  border-radius: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 18px;
+}
+
+.add-option-form .inline-actions {
+  margin-top: 13px;
+}
+
 .add-option-plus {
   font-size: 18px;
   font-weight: 300;
