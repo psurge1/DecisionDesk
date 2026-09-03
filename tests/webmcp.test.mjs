@@ -8,6 +8,7 @@ let createReadTools;
 let createMutationTools;
 let createDecisionDeskTools;
 let registerDecisionDeskWebMcp;
+let createEntranceRegistry;
 
 before(async () => {
   const virtualId = "virtual:webmcp-test-entry";
@@ -30,6 +31,7 @@ before(async () => {
         export { createMutationTools } from "./src/webmcp/mutationTools.ts";
         export { createDecisionDeskTools } from "./src/webmcp/tools.ts";
         export { registerDecisionDeskWebMcp } from "./src/webmcp/register.ts";
+        export { createEntranceRegistry } from "./src/motion/entranceRegistry.ts";
           `;
         },
       },
@@ -42,7 +44,30 @@ before(async () => {
   });
   const source = bundle.output.find((output) => output.type === "chunk").code;
   const modules = await import(`data:text/javascript;base64,${Buffer.from(source).toString("base64")}`);
-  ({ createDecisionStore, demoAppState, createReadTools, createMutationTools, createDecisionDeskTools, registerDecisionDeskWebMcp } = modules);
+  ({ createDecisionStore, demoAppState, createReadTools, createMutationTools, createDecisionDeskTools, registerDecisionDeskWebMcp, createEntranceRegistry } = modules);
+});
+
+test("entrance motion only marks entities inserted during the current session", () => {
+  let currentTime = 100;
+  const registry = createEntranceRegistry(demoAppState, () => currentTime);
+  const existingThought = demoAppState.desks[0].options[0].thoughts[0];
+
+  assert.equal(registry.className("thought", existingThought.id, existingThought.source), "");
+  assert.equal(
+    registry.className("thought", "human-new", "human"),
+    " motion-enter motion-enter--thought",
+  );
+  assert.equal(
+    registry.className("option", "agent-new", "agent"),
+    " motion-enter motion-enter--option motion-enter--agent",
+  );
+  assert.equal(
+    registry.className("option", "agent-new", "agent"),
+    " motion-enter motion-enter--option motion-enter--agent",
+  );
+
+  currentTime += 901;
+  assert.equal(registry.className("option", "agent-new", "agent"), "");
 });
 
 test("shared tool catalog contains the definitions used for registration and inspection", async () => {

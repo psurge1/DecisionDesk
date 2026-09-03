@@ -1,4 +1,5 @@
 import { FocusEvent, FormEvent, KeyboardEvent, useEffect, useState } from "react";
+import { entranceRegistry } from "../motion";
 import { decisionStore } from "../store";
 import type { Thought, ThoughtWeight } from "../types";
 
@@ -66,7 +67,9 @@ export function ThoughtCard({ deskId, optionId, thought }: ThoughtCardProps) {
 
   return (
     <article
-      className={`thought-card thought-card--${thought.type}${thought.pinned ? " thought-card--pinned" : ""}`}
+      className={`thought-card thought-card--${thought.type}${
+        thought.pinned ? " thought-card--pinned" : ""
+      }${entranceRegistry.className("thought", thought.id, thought.source)}`}
     >
       <div className="thought-meta">
         <span className="thought-type" aria-label={thought.type === "pro" ? "Pro" : "Con"}>

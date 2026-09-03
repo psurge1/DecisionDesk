@@ -1,4 +1,5 @@
 import { FocusEvent, FormEvent, KeyboardEvent, useState } from "react";
+import { entranceRegistry } from "../motion";
 import { decisionStore } from "../store";
 import type { Desk, ThoughtType } from "../types";
 import { ConsiderationTray } from "./ConsiderationTray";
@@ -107,7 +108,11 @@ export function DeskWorkspace({ desk }: DeskWorkspaceProps) {
             <div className="option-grid">
           {desk.options.map((option, optionIndex) => (
             <article
-              className={`option-column option-column--${(optionIndex % 3) + 1}`}
+              className={`option-column option-column--${(optionIndex % 3) + 1}${entranceRegistry.className(
+                "option",
+                option.id,
+                option.source,
+              )}`}
               key={option.id}
             >
               <OptionHeader

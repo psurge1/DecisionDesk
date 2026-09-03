@@ -1,4 +1,5 @@
 import { FormEvent, useState } from "react";
+import { entranceRegistry } from "../motion";
 import { decisionStore } from "../store";
 import type { Consideration, Desk, ThoughtType } from "../types";
 
@@ -69,7 +70,13 @@ function ConsiderationSlip({ desk, consideration }: { desk: Desk; consideration:
   }
 
   return (
-    <article className="consideration-item">
+    <article
+      className={`consideration-item${entranceRegistry.className(
+        "consideration",
+        consideration.id,
+        consideration.source,
+      )}`}
+    >
       <p>{consideration.text}</p>
       {relatedOptions.length ? (
         <span className="consideration-related">
