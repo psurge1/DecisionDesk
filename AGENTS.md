@@ -36,3 +36,22 @@ Do not add:
 
 Run the build and relevant tests after changes.
 
+
+
+## UI Design Principle: Minimalism
+
+DecisionDesk should feel calm, focused, and intentionally minimal.
+
+The user's decision content must dominate the interface. Application chrome, controls, metadata, decoration, and explanatory text should recede into the background.
+
+Default to removing rather than adding UI.
+
+* Do not display information simply because it exists.
+* Avoid nested cards and excessive containers.
+* Avoid excessive badges, labels, helper text, icons, borders, and decorative elements.
+* Prefer whitespace and typography for hierarchy.
+* Prefer contextual controls over permanently visible controls when practical.
+* Every persistent UI element must justify the attention and space it consumes.
+* Preserve the physical desk/stationery metaphor through a few deliberate details, not decorative clutter.
+
+Target aesthetic: an elegant desk with a few important pieces of paper, not a desk covered in stationery.
