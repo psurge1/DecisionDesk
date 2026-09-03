@@ -1,13 +1,30 @@
-import { demoDesk } from "./data/demoDesk";
+import { useCurrentDesk } from "./store";
 import "./index.css";
 
 function App() {
+  const currentDesk = useCurrentDesk();
+
+  if (!currentDesk) {
+    return (
+      <main className="app-shell">
+        <header className="app-header">
+          <div className="brand-lockup">DecisionDesk</div>
+        </header>
+        <section className="desk-workspace">
+          <header className="workspace-header">
+            <h1>No desk selected</h1>
+          </header>
+        </section>
+      </main>
+    );
+  }
+
   return (
     <main className="app-shell">
       <header className="app-header">
         <div className="brand-lockup">DecisionDesk</div>
         <nav className="desk-navigation" aria-label="DecisionDesk navigation">
-          <button className="desk-switcher" type="button" aria-label={`Switch desk. Current desk: ${demoDesk.title}`}>
+          <button className="desk-switcher" type="button" aria-label={`Switch desk. Current desk: ${currentDesk.title}`}>
             Desks
           </button>
           <button className="new-desk-button" type="button" disabled>
@@ -18,12 +35,12 @@ function App() {
 
       <section className="desk-workspace">
         <header className="workspace-header">
-          <h1>{demoDesk.title}</h1>
+          <h1>{currentDesk.title}</h1>
         </header>
 
         <section className="options-area" aria-label="Decision options">
           <div className="option-grid">
-            {demoDesk.options.map((option, optionIndex) => (
+            {currentDesk.options.map((option, optionIndex) => (
               <article className={`option-column option-column--${optionIndex + 1}`} key={option.id}>
                 <header className="option-header">
                   <h2>{option.name}</h2>
@@ -73,7 +90,7 @@ function App() {
         <section className="open-questions" aria-label="Open considerations">
           <h2>Things I’m still thinking about</h2>
           <div className="consideration-list">
-            {demoDesk.considerations.map((consideration) => (
+            {currentDesk.considerations.map((consideration) => (
               <div className="consideration-item" key={consideration.id}>
                 <span>{consideration.text}</span>
               </div>
